@@ -21,7 +21,15 @@ public class UsuarioController {
 
 
     @GetMapping
-    public List<Usuario> getAll(){
+    public List<Usuario> getAll(@RequestParam(required = false) String nome, @RequestParam(required = false) String cpf){
+        if (nome != null && !nome.isEmpty()){
+            return usuarioService.getAllByName(nome);
+        }
+
+        if (cpf != null && !cpf.isEmpty()){
+            return usuarioService.getAllByCpf(cpf);
+        }
+
         return usuarioService.getAllUsuarios();
     }
 
@@ -44,6 +52,16 @@ public class UsuarioController {
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioDTO> update(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO){
         Optional<UsuarioDTO> usuarioDTOOptional = usuarioService.updateUsuario(id, usuarioDTO);
+        if (usuarioDTOOptional.isPresent()){
+            return ResponseEntity.ok(usuarioDTOOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/atualizarSenha/{id}")
+    public ResponseEntity<UsuarioDTO> updateUserSenha(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO){
+        Optional<UsuarioDTO> usuarioDTOOptional = usuarioService.updateUsuarioUserSenha(id, usuarioDTO);
         if (usuarioDTOOptional.isPresent()){
             return ResponseEntity.ok(usuarioDTOOptional.get());
         } else {

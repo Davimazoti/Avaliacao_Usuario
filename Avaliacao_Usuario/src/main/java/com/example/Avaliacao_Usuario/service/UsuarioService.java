@@ -20,6 +20,14 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
+    public List<Usuario> getAllByName(String nome){
+        return usuarioRepository.findAllByNome(nome);
+    }
+
+    public List<Usuario> getAllByCpf(String cpf){
+        return usuarioRepository.findAllByCpf(cpf);
+    }
+
     public Optional<UsuarioDTO> getById(Long id){
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
         if (usuarioOptional.isPresent()){
@@ -51,6 +59,21 @@ public class UsuarioService {
 
             return Optional.of(usuarioDTO.fromUsuario(usuario));
         } else{
+            return Optional.empty();
+        }
+    }
+
+    public Optional<UsuarioDTO> updateUsuarioUserSenha(Long id, UsuarioDTO usuarioDTO){
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+        if (usuarioOptional.isPresent()){
+            Usuario usuario = usuarioOptional.get();
+            usuario.setUsername(usuarioDTO.getUsername());
+            usuario.setSenha(usuarioDTO.getSenha());
+
+            usuario = usuarioRepository.save(usuario);
+
+            return Optional.of(usuarioDTO.fromUsuario(usuario));
+        }else {
             return Optional.empty();
         }
     }

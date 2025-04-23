@@ -3,5 +3,11 @@ package com.example.Avaliacao_Usuario.repository;
 import com.example.Avaliacao_Usuario.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+
+    List<Usuario> findAllByNome(String nome);
+    List<Usuario> findAllByCpf(String cpf);
+
 }
