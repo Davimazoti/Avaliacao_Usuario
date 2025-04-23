@@ -19,12 +19,6 @@
         <label>E-mail:</label>
         <input type="text" name="email" id="email" required><br><br>
 
-        <label>Username:</label>
-        <input type="text" name="username" id="username" required><br><br>
-
-        <label>Senha:</label>
-        <input type="text" name="senha" id="senha" required><br><br>
-
         <label>Data Nascimento:</label>
         <input type="date" name="dataNascimento" id="dataNascimento" required><br><br>
         
@@ -77,10 +71,15 @@
 
         //## Enviar usuario para salvar(POST)
         function criarObjetoJson(){
-            
             // ESTRUTURE O OBJETO NO FORMATO JSON
-
-            return formData
+            let formData = {
+                nome: document.getElementById("nome").value,
+                sobrenome: document.getElementById("sobrenome").value,
+                cpf: document.getElementById("cpf").value,
+                email: document.getElementById("email").value,
+                dataNascimento: (document.getElementById("dataNascimento").value)
+            };
+            return formData;
         }
 
         async function putUsuario(event) {

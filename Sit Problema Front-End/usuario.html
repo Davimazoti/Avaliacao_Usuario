@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Usuário</title>
+<html>
 </head>
 <body>
     <h2>Cadastro de Usuário</h2>
@@ -36,6 +39,10 @@
     <form id="usuarioBusca">
         <label>Nome do Usuario:</label>
         <input type="text" name="nomeBusca" id="nomeBusca"><br><br>
+
+        <label>CPF do Usuario:</label>
+        <input type="text" name="cpfBusca" id="cpfBusca"><br><br>
+        
         <button type="submit">Carregar Usuarios</button>
     </form>
 
@@ -46,7 +53,17 @@
         // ## Funções para enviar Usuarios(POST)
         function criarObjetoParaEnviar(){
             
-            // ESTRUTURE O OBJETO NO FORMATO JSON
+            let formData = {
+                nome: document.getElementById("nome").value,
+                sobrenome: document.getElementById("sobrenome").value,
+                cpf: document.getElementById("cpf").value,
+                email: document.getElementById("email").value,
+                username: document.getElementById("username").value,
+                senha: document.getElementById("senha").value,
+                dataNascimento: (document.getElementById("dataNascimento").value)
+            }
+
+            console.log(formData);
 
             return formData
         }
@@ -87,15 +104,25 @@
                 item.textContent = `ID: ${usuario.id} - Nome: ${usuario.nome} - Sobrenome: ${usuario.sobrenome} - CPF: ${usuario.cpf}
                     - Email: ${usuario.email} - Username: ${usuario.username} - Senha: ${usuario.senha} - Data Nascimento: ${usuario.dataNascimento}`;
                 
-                // botão de editar
+                // botão de editar user
                 let btnLink = document.createElement("button");
-                btnLink.textContent = "Editar";
+                btnLink.textContent = "EditarUser";
                 btnLink.target = "_blank";
                 btnLink.style.marginLeft = "10px";
                 btnLink.onclick = function() {
                     window.open(`usuarioEdit.html?id=${usuario.id}`, '_blank');
                 };
                 item.appendChild(btnLink);
+
+                // botão de editar user senha
+                let btnLinkSenha = document.createElement("button");
+                btnLinkSenha.textContent = "EditarSenha";
+                btnLinkSenha.target = "_blank";
+                btnLinkSenha.style.marginLeft = "10px";
+                btnLinkSenha.onclick = function() {
+                    window.open(`usuarioEditSenha.html?id=${usuario.id}`, '_blank');
+                };
+                item.appendChild(btnLinkSenha);
 
                 // botão de deletar
                 let btnDeletar = document.createElement("button")
@@ -117,6 +144,30 @@
 
             try {
                 let response = await fetch(`http://localhost:8080/usuario?nome=${nomeBusca}`, {
+                method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
+    
+                if(!response.ok){
+                    alert("Erro do back-end" + response.status)
+                    return
+                }
+    
+                let data = await response.json()
+                criarListaDeUsuarios(data)
+            } catch (error) {
+                alert("Erro na requisição: " + error.message)
+            }
+        }
+
+
+        async function getUsuariosCpf(event) {
+            event.preventDefault()
+
+            let cpfBusca = document.getElementById("cpfBusca").value; // acrecentando filtro de cpf a busca, caso necessário
+
+            try {
+                let response = await fetch(`http://localhost:8080/usuario?cpf=${cpfBusca}`, {
                 method: "GET",
                     headers: { "Content-Type": "application/json" },
                 });

@@ -7,9 +7,7 @@
     <h2>Editar senha de Usuário</h2>
     <form id="usuarioForm">
         <input type="hidden" id="usuarioId">
-        <label>Nome:</label>
-        <input type="text" name="nome" id="nome" disabled><br><br>
-
+        
         <label>Username:</label>
         <input type="text" name="username" id="username" required><br><br>
 
@@ -63,6 +61,10 @@
         function criarObjetoJson(){
             
             // ESTRUTURE O OBJETO NO FORMATO JSON
+            let formData = {
+                username: document.getElementById("username").value,
+                senha: parseFloat(document.getElementById("senha").value)
+            }
 
             return formData
         }
